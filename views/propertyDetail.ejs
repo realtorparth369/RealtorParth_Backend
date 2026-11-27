@@ -1,0 +1,203 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title><%= property.UnparsedAddress || "Property Detail" %></title>
+  <style>
+    body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+    .container { max-width: 900px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .gallery { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; }
+    .gallery img { width: 300px; height: 200px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+    h1 { margin-bottom: 10px; }
+    .price { font-size: 22px; color: #0077cc; margin-bottom: 10px; }
+    .details p { margin: 5px 0; font-size: 15px; }
+    .remarks { margin-top: 20px; font-size: 15px; color: #444; line-height: 1.5; }
+    .back { display: inline-block; margin-top: 20px; text-decoration: none; color: #0077cc; }
+    .back:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><%= property.UnparsedAddress || "Property" %></h1>
+    <div class="price">Price: $<%= (property.ListPrice != null) ? property.ListPrice.toLocaleString() : "N/A" %></div>
+    
+    Image Gallery
+    <div class="gallery">
+      <% if (property.Media && property.Media.length > 0) { %>
+        <% property.Media.forEach(img => { %>
+          <img src="<%= img.MediaURL %>" alt="Property Image">
+        <% }) %>
+      <% } else { %>
+        <img src="https://via.placeholder.com/300x200?text=No+Image" alt="No Image">
+      <% } %>
+    </div>
+
+    Property Details
+    <div class="details">
+      <p><strong>Status:</strong> <%= property.StandardStatus || "N/A" %></p>
+      <p><strong>Type:</strong> <%= property.PropertySubType || "N/A" %></p>
+      <p><strong>City:</strong> <%= property.City || "N/A" %></p>
+      <p><strong>Province:</strong> <%= property.StateOrProvince || "N/A" %></p>
+      <p><strong>Postal Code:</strong> <%= property.PostalCode || "N/A" %></p>
+      <p><strong>Country:</strong> <%= property.Country || "N/A" %></p>
+      <p><strong>Listing ID:</strong> <%= property.ListingId || "N/A" %></p>
+    </div>
+
+    Remarks
+    <div class="remarks">
+      <h3>Remarks</h3>
+      <p><%= property.PublicRemarks || "No description available." %></p>
+    </div>
+
+    <a class="back" href="/">← Back to Listings</a>
+  </div>
+</body>
+</html> -->
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= property.UnparsedAddress || "Property Detail" %></title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; background: #f9fafb; margin: 0; padding: 30px; }
+    .container { max-width: 1100px; margin: auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+    h1 { font-size: 26px; margin-bottom: 10px; color: #222; }
+    .price { font-size: 24px; font-weight: bold; color: #0077cc; margin-bottom: 25px; }
+
+    /* Gallery */
+    .gallery-wrapper { margin-bottom: 30px; }
+    .main-image {
+      width: 100%;
+      height: 500px;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      margin-bottom: 12px;
+      transition: transform 0.3s ease;
+    }
+    .main-image:hover {
+      transform: scale(1.02);
+    }
+    .thumbnails {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+    .thumbnails img {
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: transform 0.2s, opacity 0.2s, border 0.2s;
+      border: 2px solid transparent;
+    }
+    .thumbnails img:hover {
+      transform: scale(1.05);
+      opacity: 1;
+    }
+    .thumbnails img.active {
+      border-color: #0077cc;
+      opacity: 1;
+    }
+
+    /* Info Grid */
+    .details { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 30px; }
+    .details p { margin: 6px 0; font-size: 15px; color: #333; }
+    .details strong { color: #111; }
+
+    /* Remarks */
+    .remarks { margin-top: 25px; }
+    .remarks h3 { margin-bottom: 10px; font-size: 20px; color: #444; }
+    .remarks p { font-size: 15px; color: #555; line-height: 1.6; }
+
+    /* Back Button */
+    .back { display: inline-block; margin-top: 25px; padding: 10px 16px; background: #0077cc; color: #fff; border-radius: 6px; text-decoration: none; font-size: 14px; transition: background 0.2s; }
+    .back:hover { background: #005fa3; }
+
+    /* Section Titles */
+    h2.section-title { font-size: 20px; margin-top: 30px; margin-bottom: 15px; color: #222; border-bottom: 2px solid #eee; padding-bottom: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Title + Price -->
+    <h1><%= property.UnparsedAddress || "Property" %></h1>
+    <div class="price">$<%= (property.ListPrice != null) ? property.ListPrice.toLocaleString() : "N/A" %></div>
+    
+    <!-- Image Gallery -->
+    <div class="gallery-wrapper">
+      <% if (property.Media && property.Media.length > 0) { %>
+        <!-- Main Image -->
+        <img id="mainImage" src="<%= property.Media[0].MediaURL %>" alt="Property Image" class="main-image">
+
+        <!-- Thumbnails -->
+        <div class="thumbnails">
+          <% property.Media.forEach((img, index) => { %>
+            <img src="<%= img.MediaURL %>" 
+                 alt="Thumbnail <%= index+1 %>" 
+                 class="<%= index === 0 ? 'active' : '' %>" 
+                 onclick="showImage(this)">
+          <% }) %>
+        </div>
+      <% } else { %>
+        <img src="https://via.placeholder.com/900x500?text=No+Image" class="main-image" alt="No Image">
+      <% } %>
+    </div>
+
+    <!-- Basic Info -->
+    <h2 class="section-title">Property Details</h2>
+    <div class="details">
+      <p><strong>Status:</strong> <%= property.StandardStatus || "N/A" %></p>
+      <p><strong>Type:</strong> <%= property.PropertySubType || "N/A" %></p>
+      <p><strong>City:</strong> <%= property.City || "N/A" %></p>
+      <p><strong>Province:</strong> <%= property.StateOrProvince || "N/A" %></p>
+      <p><strong>Postal Code:</strong> <%= property.PostalCode || "N/A" %></p>
+      <p><strong>Country:</strong> <%= property.Country || "N/A" %></p>
+      <p><strong>Listing ID:</strong> <%= property.ListingId || "N/A" %></p>
+      <p><strong>MLS® Number:</strong> <%= property.MlsNumber || "N/A" %></p>
+      <p><strong>Bedrooms:</strong> <%= property.BedroomsTotal || "N/A" %></p>
+      <p><strong>Bathrooms:</strong> <%= property.BathroomsFull || 0 %> Full, <%= property.BathroomsHalf || 0 %> Half</p>
+      <p><strong>Lot Size:</strong> <%= property.LotSizeArea || "N/A" %> <%= property.LotSizeUnits || "" %></p>
+      <p><strong>Year Built:</strong> <%= property.YearBuilt || "N/A" %></p>
+      <p><strong>Heating:</strong> <%= property.Heating || "N/A" %></p>
+      <p><strong>Cooling:</strong> <%= property.Cooling || "N/A" %></p>
+      <p><strong>Parking:</strong> <%= property.ParkingTotal || "N/A" %> Spaces</p>
+    </div>
+
+    <!-- Features Section -->
+    <h2 class="section-title">Features</h2>
+    <div class="details">
+      <p><strong>Basement:</strong> <%= property.Basement || "N/A" %></p>
+      <p><strong>Fireplace:</strong> <%= property.FireplaceYN ? "Yes" : "No" %></p>
+      <p><strong>Waterfront:</strong> <%= property.WaterfrontYN ? "Yes" : "No" %></p>
+      <p><strong>Pool:</strong> <%= property.PoolFeatures || "N/A" %></p>
+    </div>
+
+    <!-- Remarks -->
+    <div class="remarks">
+      <h3>Remarks</h3>
+      <p><%= property.PublicRemarks || "No description available." %></p>
+    </div>
+
+    <a class="back" href="/">← Back to Listings</a>
+  </div>
+
+  <script>
+    function showImage(imgElement) {
+      const mainImage = document.getElementById("mainImage");
+      mainImage.src = imgElement.src;
+
+      document.querySelectorAll(".thumbnails img").forEach(img => img.classList.remove("active"));
+      imgElement.classList.add("active");
+    }
+  </script>
+</body>
+</html>
